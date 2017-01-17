@@ -65,6 +65,11 @@
       .mdl-textfield {
         width: 200px;
       }
+
+      #start-help {
+        width: 80%;
+        margin: 0 auto;
+      }
     </style>
 
     <!-- This header element defines a pretty bar at the top of the page with host and port inputs, and a "connect" button -->
@@ -108,9 +113,39 @@
     </header>
 
     <!-- Here's the grid container that holds all the event cells -->
-    <div id="events-container" class="mdl-grid"></div>
+    <div id="events-container" class="mdl-grid">
+      <div id="start-help">
+        <p>
+          This debugger has been tested with the following libraries.
+        </p>
+        <ul>
+          <li><a href="https://github.com/Tealium/tealium-swift">Tealium Swift Library</a></li>
+          <li><a href="https://github.com/Tealium/tealium-android">Tealium Android Library</a></li>
+        </ul>
+      </div>
+    </div>
 
     <script type="text/javascript">
+
+    // determine if the browser is either Chrome or Safari
+    var userAgent = navigator.userAgent.toLowerCase();
+    var browser = "unknown";
+    if (userAgent.indexOf('safari') != -1) {
+      if (userAgent.indexOf('chrome') > -1) {
+        browser = "chrome";
+      } else {
+        browser = "safari";
+      }
+    }
+
+    // Safari is known not to support the hosted version of the debugger, need to download page and run locally
+    if(browser == "safari" && window.location.host == "tealium.github.io") {
+    //if(browser == "safari") {
+      var start_help = document.getElementById("start-help");
+      var browser_incompatability_message = document.createElement("div");
+      browser_incompatability_message.innerHTML = "<p style=\"color: red;\">Unfortunately the hosted version of the debugger is known to not work with Safari. You can however save a local version of this page and point Safari to that instead.</p>";
+      start_help.insertBefore(browser_incompatability_message, start_help.firstChild);
+    }
 
       function htmlEscape(str) {
         return str
@@ -282,6 +317,10 @@
       // The "addEvent" function is where the magic happens. It takes the message payload
       // as a JSON object, and makes the event visible in the UI.
       function addEvent(payload) {
+        if(num_events == 0) {
+          document.getElementById("start-help").style.display = 'none';
+        }
+
         var classifier = null;
 
         // go throught the classifiers in order until a matching classifier is found
@@ -388,6 +427,9 @@
         } catch(err) {
           alert("Invalid connection info"); // Something went wrong when clicking the connect button, must be invalid input
         }
+
+        // return false to prevent postback.
+        return false;
       }
     </script>
   </body>
