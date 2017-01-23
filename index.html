@@ -139,11 +139,12 @@
     }
 
     // Safari is known not to support the hosted version of the debugger, need to download page and run locally
-    if(browser == "safari" && window.location.host == "tealium.github.io") {
+    //if(browser == "safari" && window.location.host == "tealium.github.io") {
     //if(browser == "safari") {
+    if(true) { // sometimes it makes sense to display warnings based on browser. For now we're displaying the same warning all the time.
       var start_help = document.getElementById("start-help");
       var browser_incompatability_message = document.createElement("div");
-      browser_incompatability_message.innerHTML = "<p style=\"color: red;\">Unfortunately the hosted version of the debugger is known to not work with Safari. You can however save a local version of this page and point Safari to that instead.</p>";
+      browser_incompatability_message.innerHTML = "<p style=\"color: red;\">For security reasons, download the debug.html file and run on a local machine and local network that you trust.</p>";
       start_help.insertBefore(browser_incompatability_message, start_help.firstChild);
     }
 
